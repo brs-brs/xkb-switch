@@ -1,6 +1,6 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
-PROJECT(XKB-SWITCH)
+PROJECT( XKB-SWITCH )
 SET(MAJOR_VERSION 2)
 SET(MINOR_VERSION 0)
 SET(RELEASE_VERSION 1)
@@ -45,7 +45,7 @@ SET(MANDIR "${CMAKE_INSTALL_PREFIX}/share/man" CACHE STRING "Manpages installati
 # Gets file name and type number
 function(install_man man_filename man_type)
     # check what compression tool is available
-    FIND_PROGRAM(COMPRESS_EXECUTABLE NAMES ${MAN_COMPRESSION})
+    find_program(COMPRESS_EXECUTABLE NAMES ${MAN_COMPRESSION})
     if(NOT COMPRESS_EXECUTABLE)
       SET(MAN_COMPRESSION NO)
     endif()
@@ -85,20 +85,16 @@ endfunction()
 # Compress and install man page
 install_man(xkb-switch 1)
 
-# Include CPack
-include(CPack)
-
 # Set CPack variables
-set(CPACK_PACKAGE_NAME "xkb-switch")
-set(CPACK_PACKAGE_VERSION ${XKBSWITCH_VERSION})
-set(CPACK_PACKAGE_CONTACT "your_email@example.com")
+SET(CPACK_PACKAGE_NAME "xkb-switch")
+SET(CPACK_PACKAGE_VERSION ${XKBSWITCH_VERSION})
+SET(CPACK_PACKAGE_CONTACT "Sergei Mironov <sergei.v.mironov@proton.me>")
 
 # Set Debian-specific variables
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Your Name") # required
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2.5)") # update as needed
-set(CPACK_DEBIAN_PACKAGE_SECTION "utils") # update as needed
-set(CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Sergey Korablin <brs@brs.im>") # required
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2.5)") # update as needed
+SET(CPACK_DEBIAN_PACKAGE_SECTION "utils") # update as needed
+SET(CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
 
-# Include CPackDeb
-include(CPackDeb)
-
+# Include CPack
+include(CPack)
