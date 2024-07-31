@@ -62,7 +62,7 @@ jobs:
         name: xkb-switch-deb
 
     - name: Display structure of downloaded files
-        run: ls -R
+      run: ls -R
 
     - name: Create GitHub Release
       id: create_release
