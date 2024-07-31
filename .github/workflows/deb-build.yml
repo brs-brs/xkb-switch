@@ -46,7 +46,7 @@ jobs:
     - name: Upload .deb package as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: myproject-package
+        name: xkb-switch-deb
         path: build/*.deb
 
   publish:
@@ -58,13 +58,14 @@ jobs:
     - name: Download .deb package
       uses: actions/download-artifact@v4
       with:
-        name: myproject-package
-        path: .
+        name: xkb-switch-deb
 
     - name: Verify .deb package exists
       run: |
         if [[ ! -f *.deb ]]; then
           echo "No .deb package found"
+          ls -lat
+          tree
           exit 1
         fi
 
@@ -86,6 +87,6 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./${{ env.DEB_FILE }}
-        asset_name: myproject-2.0.1.${{ github.run_number }}.deb
+        asset_name: xkb-switch-2.0.1.${{ github.run_number }}.deb
         asset_content_type: application/octet-stream
 
