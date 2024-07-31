@@ -19,7 +19,7 @@ jobs:
     - name: Set up CMake
       uses: jwlawson/actions-setup-cmake@v1
       with:
-        cmake-version: '3.23'  # Specify the latest stable version of CMake
+        cmake-version: '3.23'
 
     - name: Install dependencies
       run: |
@@ -45,11 +45,15 @@ jobs:
         cpack -G DEB
         ls -la
 
+    - name: Find generated .deb file
+      id: find_deb
+      run: echo "::set-output name=deb_path::$(find build -name '*.deb')"
+
     - name: Upload Debian package as artifact
       uses: actions/upload-artifact@v2
       with:
         name: xkb-switch-deb
-        path: build/*.deb
+        path: ${{ steps.find_deb.outputs.deb_path }}
 
     - name: Create GitHub Release
       id: create_release
@@ -57,8 +61,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: "v${{ github.run_number }}" # Use a unique tag for each run
-        release_name: "Development Build ${{ github.run_number }}"
+        tag_name: "v1.0.${{ github.run_number }}"  # pseudo semantic versioning
+        release_name: "Development Build 1.0.${{ github.run_number }}"
         draft: true
         prerelease: true
 
@@ -68,7 +72,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: build/*.deb
-        asset_name: xkb-switch-${{ github.run_number }}.deb
+        asset_path: ${{ steps.find_deb.outputs.deb_path }}
+        asset_name: xkb-switch-1.0.${{ github.run_number }}.deb
         asset_content_type: application/octet-stream
 
