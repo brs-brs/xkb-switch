@@ -4,6 +4,12 @@ XKB-SWITCH
 
 by Jay Bromley, Sergei Mironov, Alexei Rad'kov
 
+Fork information
+-----------------
+Added environment for .deb package build
+
+Original package information
+----------------------------
 xkb-switch is a C++ program that allows to query and change the XKB layout state.
 Originally ruby-based code written by Jay Bromley.
 
