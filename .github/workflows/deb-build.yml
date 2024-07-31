@@ -36,10 +36,14 @@ jobs:
         cmake ..
         make
 
+    - name: List build directory contents after build
+      run: ls -la build
+
     - name: Package project
       run: |
         cd build
         cpack -G DEB
+        ls -la
 
     - name: Upload Debian package as artifact
       uses: actions/upload-artifact@v2
