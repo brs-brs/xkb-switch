@@ -48,7 +48,8 @@ jobs:
     - name: Find generated .deb file
       id: find_deb
       run: |
-        echo "DEB_PATH=$(find build -name '*.deb')" >> $GITHUB_ENV
+        DEB_PATH=$(find build -name '*.deb')
+        echo "DEB_PATH=${DEB_PATH}" >> $GITHUB_ENV
 
     - name: Upload Debian package as artifact
       uses: actions/upload-artifact@v3
@@ -66,6 +67,10 @@ jobs:
         release_name: "Development Build 1.0.${{ github.run_number }}"
         draft: false  # Ensure the release is published
         prerelease: false  # Change to false if you do not want it as a prerelease
+
+    - name: Debug Release Creation
+      run: |
+        echo "Release URL: ${{ steps.create_release.outputs.html_url }}"
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
