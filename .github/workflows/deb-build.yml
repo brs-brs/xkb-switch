@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up CMake
       uses: jwlawson/actions-setup-cmake@v1
@@ -50,24 +50,24 @@ jobs:
       run: echo "::set-output name=deb_path::$(find build -name '*.deb')"
 
     - name: Upload Debian package as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: xkb-switch-deb
         path: ${{ steps.find_deb.outputs.deb_path }}
 
     - name: Create GitHub Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: actions/create-release@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: "v1.0.${{ github.run_number }}"  # pseudo semantic versioning
+        tag_name: "v1.0.${{ github.run_number }}"  # Example of using a pseudo semantic versioning
         release_name: "Development Build 1.0.${{ github.run_number }}"
-        draft: true
-        prerelease: true
+        draft: false  # Ensure the release is published
+        prerelease: false  # Change to false if you do not want it as a prerelease
 
     - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v1.0.3
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
