@@ -40,14 +40,13 @@ jobs:
       run: |
         cd build
         cpack -G DEB
-        ls -la
-        DEB_PATH=$(ls *.deb)
-        echo "DEB_PATH=${DEB_PATH}" >> $GITHUB_ENV
+        DEB_FILE=$(ls *.deb)
+        echo "DEB_FILE=${DEB_FILE}" >> $GITHUB_ENV
 
     - name: Upload .deb package as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: xkb-switch-deb
+        name: myproject-package
         path: build/*.deb
 
   publish:
@@ -59,10 +58,15 @@ jobs:
     - name: Download .deb package
       uses: actions/download-artifact@v4
       with:
-        name: xkb-switch-deb
+        name: myproject-package
+        path: .
 
-    - name: Display structure of downloaded files
-      run: ls -R
+    - name: Verify .deb package exists
+      run: |
+        if [[ ! -f *.deb ]]; then
+          echo "No .deb package found"
+          exit 1
+        fi
 
     - name: Create GitHub Release
       id: create_release
@@ -70,8 +74,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: "v1.5.8.${{ github.run_number }}"  # Example of using a pseudo semantic versioning
-        release_name: "Development Build 1.5.8.${{ github.run_number }}"
+        tag_name: "v2.0.1.${{ github.run_number }}"  # Example of using a pseudo semantic versioning
+        release_name: "Development Build 2.0.1.${{ github.run_number }}"
         draft: false  # Ensure the release is published
         prerelease: false  # Change to false if you do not want it as a prerelease
 
@@ -81,7 +85,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./*deb
-        asset_name: xkb-switch-deb-1.8.5.${{ github.run_number }}.deb
+        asset_path: ./${{ env.DEB_FILE }}
+        asset_name: myproject-2.0.1.${{ github.run_number }}.deb
         asset_content_type: application/octet-stream
 
