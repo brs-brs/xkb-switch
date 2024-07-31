@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      deb_file: ${{ steps.package.outputs.deb_file }}
 
     steps:
     - name: Checkout code
@@ -37,11 +39,12 @@ jobs:
         make
 
     - name: Package project
+      id: package
       run: |
         cd build
         cpack -G DEB
         DEB_FILE=$(ls *.deb)
-        echo "DEB_FILE=${DEB_FILE}" >> $GITHUB_ENV
+        echo "DEB_FILE=${DEB_FILE}" >> "$GITHUB_OUTPUT"
 
     - name: Upload .deb package as artifact
       uses: actions/upload-artifact@v4
@@ -75,6 +78,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEB_FILE: ${{needs.build.outputs.deb_file}}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./${{ env.DEB_FILE }}
