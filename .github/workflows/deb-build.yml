@@ -47,13 +47,14 @@ jobs:
 
     - name: Find generated .deb file
       id: find_deb
-      run: echo "::set-output name=deb_path::$(find build -name '*.deb')"
+      run: |
+        echo "DEB_PATH=$(find build -name '*.deb')" >> $GITHUB_ENV
 
     - name: Upload Debian package as artifact
       uses: actions/upload-artifact@v3
       with:
         name: xkb-switch-deb
-        path: ${{ steps.find_deb.outputs.deb_path }}
+        path: ${{ env.DEB_PATH }}
 
     - name: Create GitHub Release
       id: create_release
@@ -75,7 +76,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ steps.find_deb.outputs.deb_path }}
+        asset_path: ${{ env.DEB_PATH }}
         asset_name: xkb-switch-1.0.${{ github.run_number }}.deb
         asset_content_type: application/octet-stream
 
