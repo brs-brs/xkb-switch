@@ -90,14 +90,11 @@ include(CPack)
 # Set CPack variables
 set(CPACK_PACKAGE_NAME "xkb-switch")
 set(CPACK_PACKAGE_VERSION ${XKBSWITCH_VERSION})
-set(CPACK_PACKAGE_CONTACT "brs@brs.im")
+set(CPACK_PACKAGE_CONTACT "Sergei Mironov <sergei.v.mironov@proton.me>")
 
 # Set Debian-specific variables
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Sergey Korablin") # required
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Sergey Korablin <brs@brs.im>") # required
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2.5)") # update as needed
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils") # update as needed
 set(CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
-
-# Include CPackDeb
-include(CPackDeb)
 
