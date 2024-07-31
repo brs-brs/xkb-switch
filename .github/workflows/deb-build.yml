@@ -36,26 +36,31 @@ jobs:
         cmake ..
         make
 
-    - name: List build directory contents after build
-      run: ls -la build
-
     - name: Package project
       run: |
         cd build
         cpack -G DEB
         ls -la
+        DEB_PATH=$(ls *.deb)
+        echo "DEB_PATH=${DEB_PATH}" >> $GITHUB_ENV
 
-    - name: Find generated .deb file
-      id: find_deb
-      run: |
-        DEB_PATH=$(find build -name '*.deb')
-        echo "{DEB_PATH}=\""$DEB_PATH\"" >> $GITHUB_ENV
-
-    - name: Upload Debian package as artifact
+    - name: Upload .deb package as artifact
       uses: actions/upload-artifact@v3
       with:
         name: xkb-switch-deb
-        path: ${{ env.DEB_PATH }}
+        path: build/*.deb
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+    - name: Download .deb package
+      uses: actions/download-artifact@v3
+      with:
+        name: xkb-switch-deb
+        path: .
 
     - name: Create GitHub Release
       id: create_release
@@ -68,17 +73,13 @@ jobs:
         draft: false  # Ensure the release is published
         prerelease: false  # Change to false if you do not want it as a prerelease
 
-    - name: Debug Release Creation
-      run: |
-        echo "Release URL: ${{ steps.create_release.outputs.html_url }}"
-
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.DEB_PATH }}
-        asset_name: xkb-switch-1.0.${{ github.run_number }}.deb
+        asset_path: ./*deb
+        asset_name: xkb-switch-deb-1.8.5.${{ github.run_number }}.deb
         asset_content_type: application/octet-stream
 
