@@ -6,7 +6,7 @@ by Jay Bromley, Sergei Mironov, Alexei Rad'kov
 
 Fork information
 -----------------
-@brs-brs: Added environment for .deb package build
+@brs-brs: Added environment for .deb package build.
 
 Original package information
 ----------------------------
