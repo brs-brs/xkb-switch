@@ -1,0 +1,40 @@
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake libx11-dev libxkbfile-dev
+
+    - name: Build project
+      run: |
+        mkdir -p build
+        cd build
+        cmake ..
+        make
+
+    - name: Package project
+      run: |
+        cd build
+        cpack -G DEB
+
+    - name: Upload Debian package
+      uses: actions/upload-artifact@v2
+      with:
+        name: xkb-switch-deb
+        path: build/*.deb

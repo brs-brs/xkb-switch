@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-PROJECT( XKB-SWITCH )
+PROJECT(XKB-SWITCH)
 SET(MAJOR_VERSION 2)
 SET(MINOR_VERSION 0)
 SET(RELEASE_VERSION 1)
@@ -84,3 +84,21 @@ endfunction()
 
 # Compress and install man page
 install_man(xkb-switch 1)
+
+# Include CPack
+include(CPack)
+
+# Set CPack variables
+set(CPACK_PACKAGE_NAME "xkb-switch")
+set(CPACK_PACKAGE_VERSION ${XKBSWITCH_VERSION})
+set(CPACK_PACKAGE_CONTACT "your_email@example.com")
+
+# Set Debian-specific variables
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Your Name") # required
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2.5)") # update as needed
+set(CPACK_DEBIAN_PACKAGE_SECTION "utils") # update as needed
+set(CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
+
+# Include CPackDeb
+include(CPackDeb)
+
