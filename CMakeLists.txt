@@ -45,7 +45,7 @@ SET(MANDIR "${CMAKE_INSTALL_PREFIX}/share/man" CACHE STRING "Manpages installati
 # Gets file name and type number
 function(install_man man_filename man_type)
     # check what compression tool is available
-    find_program(COMPRESS_EXECUTABLE NAMES ${MAN_COMPRESSION})
+    FIND_PROGRAM(COMPRESS_EXECUTABLE NAMES ${MAN_COMPRESSION})
     if(NOT COMPRESS_EXECUTABLE)
       SET(MAN_COMPRESSION NO)
     endif()
