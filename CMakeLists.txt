@@ -84,9 +84,6 @@ endfunction()
 # Compress and install man page
 install_man(xkb-switch 1)
 
-# Include CPack
-include(CPack)
-
 # Set CPack variables
 set(CPACK_PACKAGE_NAME "xkb-switch")
 set(CPACK_PACKAGE_VERSION ${XKBSWITCH_VERSION})
@@ -98,3 +95,5 @@ set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2.5)") # update as needed
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils") # update as needed
 set(CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
 
+# Include CPack
+include(CPack)
