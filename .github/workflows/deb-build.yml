@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libx11-dev libxkbfile-dev
+        sudo apt-get install -y libx11-dev libxkbfile-dev dpkg-dev fakeroot
 
     - name: Verify CMake version
       run: cmake --version
@@ -41,8 +41,30 @@ jobs:
         cd build
         cpack -G DEB
 
-    - name: Upload Debian package
+    - name: Upload Debian package as artifact
       uses: actions/upload-artifact@v2
       with:
         name: xkb-switch-deb
         path: build/*.deb
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: "v${{ github.run_number }}" # Use a unique tag for each run
+        release_name: "Development Build ${{ github.run_number }}"
+        draft: true
+        prerelease: true
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/*.deb
+        asset_name: xkb-switch-${{ github.run_number }}.deb
+        asset_content_type: application/octet-stream
+
