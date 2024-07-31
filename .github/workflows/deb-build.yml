@@ -45,7 +45,7 @@ jobs:
         echo "DEB_PATH=${DEB_PATH}" >> $GITHUB_ENV
 
     - name: Upload .deb package as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: xkb-switch-deb
         path: build/*.deb
@@ -57,10 +57,12 @@ jobs:
 
     steps:
     - name: Download .deb package
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: xkb-switch-deb
-        path: .
+
+    - name: Display structure of downloaded files
+        run: ls -R
 
     - name: Create GitHub Release
       id: create_release
@@ -68,8 +70,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: "v1.0.${{ github.run_number }}"  # Example of using a pseudo semantic versioning
-        release_name: "Development Build 1.0.${{ github.run_number }}"
+        tag_name: "v1.5.8.${{ github.run_number }}"  # Example of using a pseudo semantic versioning
+        release_name: "Development Build 1.5.8.${{ github.run_number }}"
         draft: false  # Ensure the release is published
         prerelease: false  # Change to false if you do not want it as a prerelease
 
